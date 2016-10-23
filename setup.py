@@ -10,11 +10,11 @@ try:
     with open('README.txt') as file:
         long_description = file.read()
 except:
-    long_description = "Deep Difference of dictionaries, iterables, strings and other objects. It will recursively look for all the changes."
+    long_description = "Deep Difference and Search of any Python object/data."
 
 setup(name='deepdiff',
-      version='1.2.0',
-      description='Deep Difference of dictionaries, iterables, strings and other objects. It will recursively look for all the changes.',
+      version='2.5.1',
+      description='Deep Difference and Search of any Python object/data.',
       url='https://github.com/seperman/deepdiff',
       download_url='https://github.com/seperman/deepdiff/tarball/master',
       author='Seperman',
@@ -22,6 +22,7 @@ setup(name='deepdiff',
       license='MIT',
       packages=['deepdiff'],
       zip_safe=False,
+      test_suite="tests",
       long_description=long_description,
       classifiers=[
           "Intended Audience :: Developers",

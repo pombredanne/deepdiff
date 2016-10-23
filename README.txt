@@ -1,25 +1,19 @@
-**DeepDiff v 1.2.0**
+**DeepDiff v 2.5.1**
 
 Deep Difference of dictionaries, iterables, strings and other objects. It will recursively look for all the changes.
 
 Tested on Python 2.7, 3.3, 3.4, 3.5, Pypy, Pypy3
 
-**Pycon 2016**
-
-I was honored to give a talk about how DeepDiff does what it does at Pycon 2016. Please check out the video and let me know what you think:
-
-Diff It To Dig It Video
-https://www.youtube.com/watch?v=J5r99eJIxF4
-And here is more info:
-http://zepworks.com/blog/diff-it-to-digg-it/
+Note: Checkout the github repo's readme for complete coverage of features:
+https://github.com/seperman/deepdiff
 
 **Parameters**
 
-t1 : A dictionary, list, string or any python object that has __dict__
-    This is the first item to be compared to the second item
+In addition to the 2 objects being compared:
 
-t2 : dictionary, list, string or almost any python object that has __dict__
-    The second item is to be compared to the first one
+- ignore_order
+- report_repetition
+- verbose_level
 
 **Returns**
 
@@ -47,34 +41,34 @@ Type of an item has changed
     >>> t1 = {1:1, 2:2, 3:3}
     >>> t2 = {1:1, 2:"2", 3:3}
     >>> pprint(DeepDiff(t1, t2), indent=2)
-    { 'type_changes': { 'root[2]': { 'newtype': <class 'str'>,
-                                     'newvalue': '2',
-                                     'oldtype': <class 'int'>,
-                                     'oldvalue': 2}}}
+    { 'type_changes': { 'root[2]': { 'new_type': <class 'str'>,
+                                     'new_value': '2',
+                                     'old_type': <class 'int'>,
+                                     'old_value': 2}}}
 
 Value of an item has changed
     >>> t1 = {1:1, 2:2, 3:3}
     >>> t2 = {1:1, 2:4, 3:3}
     >>> pprint(DeepDiff(t1, t2), indent=2)
-    {'values_changed': {'root[2]': {'newvalue': 4, 'oldvalue': 2}}}
+    {'values_changed': {'root[2]': {'new_value': 4, 'old_value': 2}}}
 
 Item added and/or removed
     >>> t1 = {1:1, 2:2, 3:3, 4:4}
     >>> t2 = {1:1, 2:4, 3:3, 5:5, 6:6}
     >>> ddiff = DeepDiff(t1, t2)
     >>> pprint (ddiff)
-    {'dic_item_added': ['root[5]', 'root[6]'],
-     'dic_item_removed': ['root[4]'],
-     'values_changed': {'root[2]': {'newvalue': 4, 'oldvalue': 2}}}
+    {'dictionary_item_added': ['root[5]', 'root[6]'],
+     'dictionary_item_removed': ['root[4]'],
+     'values_changed': {'root[2]': {'new_value': 4, 'old_value': 2}}}
 
 String difference
     >>> t1 = {1:1, 2:2, 3:3, 4:{"a":"hello", "b":"world"}}
     >>> t2 = {1:1, 2:4, 3:3, 4:{"a":"hello", "b":"world!"}}
     >>> ddiff = DeepDiff(t1, t2)
     >>> pprint (ddiff, indent = 2)
-    { 'values_changed': { 'root[2]': {'newvalue': 4, 'oldvalue': 2},
-                          "root[4]['b']": { 'newvalue': 'world!',
-                                            'oldvalue': 'world'}}}
+    { 'values_changed': { 'root[2]': {'new_value': 4, 'old_value': 2},
+                          "root[4]['b']": { 'new_value': 'world!',
+                                            'old_value': 'world'}}}
 
 
 String difference 2
@@ -91,8 +85,8 @@ String difference 2
                                                     ' 1\n'
                                                     ' 2\n'
                                                     ' End',
-                                            'newvalue': 'world\n1\n2\nEnd',
-                                            'oldvalue': 'world!\n'
+                                            'new_value': 'world\n1\n2\nEnd',
+                                            'old_value': 'world!\n'
                                                         'Goodbye!\n'
                                                         '1\n'
                                                         '2\n'
@@ -115,10 +109,10 @@ Type change
     >>> t2 = {1:1, 2:2, 3:3, 4:{"a":"hello", "b":"world\n\n\nEnd"}}
     >>> ddiff = DeepDiff(t1, t2)
     >>> pprint (ddiff, indent = 2)
-    { 'type_changes': { "root[4]['b']": { 'newtype': <class 'str'>,
-                                          'newvalue': 'world\n\n\nEnd',
-                                          'oldtype': <class 'list'>,
-                                          'oldvalue': [1, 2, 3]}}}
+    { 'type_changes': { "root[4]['b']": { 'new_type': <class 'str'>,
+                                          'new_value': 'world\n\n\nEnd',
+                                          'old_type': <class 'list'>,
+                                          'old_value': [1, 2, 3]}}}
 
 List difference
     >>> t1 = {1:1, 2:2, 3:3, 4:{"a":"hello", "b":[1, 2, 3, 4]}}
@@ -133,8 +127,8 @@ List difference 2:
     >>> ddiff = DeepDiff(t1, t2)
     >>> pprint (ddiff, indent = 2)
     { 'iterable_item_added': {"root[4]['b'][3]": 3},
-      'values_changed': { "root[4]['b'][1]": {'newvalue': 3, 'oldvalue': 2},
-                          "root[4]['b'][2]": {'newvalue': 2, 'oldvalue': 3}}}
+      'values_changed': { "root[4]['b'][1]": {'new_value': 3, 'old_value': 2},
+                          "root[4]['b'][2]": {'new_value': 2, 'old_value': 3}}}
 
 List difference ignoring order or duplicates: (with the same dictionaries as above)
     >>> t1 = {1:1, 2:2, 3:3, 4:{"a":"hello", "b":[1, 2, 3]}}
@@ -148,8 +142,8 @@ List that contains dictionary:
     >>> t2 = {1:1, 2:2, 3:3, 4:{"a":"hello", "b":[1, 2, {1:3}]}}
     >>> ddiff = DeepDiff(t1, t2)
     >>> pprint (ddiff, indent = 2)
-    { 'dic_item_removed': ["root[4]['b'][2][2]"],
-      'values_changed': {"root[4]['b'][2][1]": {'newvalue': 3, 'oldvalue': 1}}}
+    { 'dictionary_item_removed': ["root[4]['b'][2][2]"],
+      'values_changed': {"root[4]['b'][2][1]": {'new_value': 3, 'old_value': 1}}}
 
 Sets:
     >>> t1 = {1, 2, 8}
@@ -164,7 +158,7 @@ Named Tuples:
     >>> t1 = Point(x=11, y=22)
     >>> t2 = Point(x=11, y=23)
     >>> pprint (DeepDiff(t1, t2))
-    {'values_changed': {'root.y': {'newvalue': 23, 'oldvalue': 22}}}
+    {'values_changed': {'root.y': {'new_value': 23, 'old_value': 22}}}
 
 Custom objects:
     >>> class ClassA(object):
@@ -176,13 +170,35 @@ Custom objects:
     >>> t2 = ClassA(2)
     >>> 
     >>> pprint(DeepDiff(t1, t2))
-    {'values_changed': {'root.b': {'newvalue': 2, 'oldvalue': 1}}}
+    {'values_changed': {'root.b': {'new_value': 2, 'old_value': 1}}}
 
 Object attribute added:
     >>> t2.c = "new attribute"
     >>> pprint(DeepDiff(t1, t2))
     {'attribute_added': ['root.c'],
-     'values_changed': {'root.b': {'newvalue': 2, 'oldvalue': 1}}}
+     'values_changed': {'root.b': {'new_value': 2, 'old_value': 1}}}
+
+Exclude certain types from comparison:
+    >>> l1 = logging.getLogger("test")
+    >>> l2 = logging.getLogger("test2")
+    >>> t1 = {"log": l1, 2: 1337}
+    >>> t2 = {"log": l2, 2: 1337}
+    >>> print(DeepDiff(t1, t2, exclude_types={logging.Logger}))
+    {}
+
+Exclude part of your object tree from comparison:
+    >>> t1 = {"for life": "vegan", "ingredients": ["no meat", "no eggs", "no dairy"]}
+    >>> t2 = {"for life": "vegan", "ingredients": ["veggies", "tofu", "soy sauce"]}
+    >>> print (DeepDiff(t1, t2, exclude_paths={"root['ingredients']"}))
+    {}
+
+
+Using DeepDiff in unit tests
+result is the output of the function that is being tests.
+expected is the expected output of the function.
+    >>> assertEqual(DeepDiff(result, expected), {})
+
+
 
 
 **Difference with Json Patch**
@@ -196,12 +212,27 @@ Example in DeepDiff for the same operation:
     >>> item1 = {'a':{'b':{'c':'foo'}}}
     >>> item2 = {'a':{'b':{'c':42}}}
     >>> DeepDiff(item1, item2)
-    {'type_changes': {"root['a']['b']['c']": {'oldtype': <type 'str'>, 'newvalue': 42, 'oldvalue': 'foo', 'newtype': <type '
+    {'type_changes': {"root['a']['b']['c']": {'old_type': <type 'str'>, 'new_value': 42, 'old_value': 'foo', 'new_type': <type '
+
+**Pycon 2016**
+
+I was honored to give a talk about how DeepDiff does what it does at Pycon 2016. Please check out the video and let me know what you think:
+
+Diff It To Dig It Video
+https://www.youtube.com/watch?v=J5r99eJIxF4
+And here is more info:
+http://zepworks.com/blog/diff-it-to-digg-it/
 
 
 **Changelog**
 
-- v1-2-0: Adding repetition report option when ignoring order
+- v2-5-0: Adding ContentHash module to fix ignore_order once and for all.
+- v2-1-0: Adding Deep Search. Now you can search for item in an object.
+- v2-0-0: Exclusion patterns better coverage. Updating docs.
+- v1-8-0: Exclusion patterns.
+- v1-7-0: Deep Set comparison.
+- v1-6-0: Unifying key names. i.e newvalue is new_value now. For backward compatibility, newvalue still works.
+- v1-5-0: Fixing ignore order containers with unordered items. Adding significant digits when comparing decimals. Changes property is deprecated.
 - v1-1-0: Changing Set, Dictionary and Object Attribute Add/Removal to be reported as Set instead of List. Adding Pypy compatibility.
 - v1-0-2: Checking for ImmutableMapping type instead of dict
 - v1-0-1: Better ignore order support
@@ -214,7 +245,7 @@ Example in DeepDiff for the same operation:
 - v0-5-6: Adding slots support
 - v0-5-5: Adding loop detection
 
-**Author**
+**Primary Author**
 Sep Dehpour
 
 Github:  https://github.com/seperman
@@ -222,8 +253,14 @@ Linkedin:  http://www.linkedin.com/in/sepehr
 ZepWorks:   http://www.zepworks.com
 Article about Deepdiff: http://zepworks.com/blog/diff-it-to-digg-it/
 
+**Contributors**
+
 Thanks to:
 
+- nfvs for Travis-CI setup script
 - brbsix for initial Py3 porting
 - WangFenjin for unicode support
-- nfvs for Travis-CI setup script
+- timoilya for comparing list of sets when ignoring order
+- Bernhard10 for significant digits comparison
+- b-jazz for PEP257 cleanup, Standardize on full names, fixing line endings.
+- Victor Hahn Castell @ Flexoptix for deep set comparison and exclusion patterns
